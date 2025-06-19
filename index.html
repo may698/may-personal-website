@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>may personal website</title>
+    <!-- 可爱日语字体引入 -->
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/earlyaccess/nicomoji.css" rel="stylesheet">
+    <style>
+        body {
+            background: #d2c2ad;
+            font-family: 'Kiwi Maru', 'Nico Moji', 'Comic Sans MS', 'Segoe UI', cursive, 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN', 'Rounded Mplus 1c', 'Arial Rounded MT Bold', 'Meiryo', 'sans-serif';
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f5e9da;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 16px 0;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: #6d5c4d;
+            font-size: 1.2em;
+            margin: 0 24px;
+            padding: 6px 12px;
+            border-radius: 12px;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+            font-family: 'Nico Moji', 'Kiwi Maru', 'Comic Sans MS', 'Segoe UI', cursive, 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN', 'Rounded Mplus 1c', 'Arial Rounded MT Bold', 'Meiryo', 'sans-serif';
+        }
+        .navbar a.active, .navbar a:hover {
+            background: #e2d2be;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transform: scale(1.08);
+        }
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.7);
+            border-radius: 24px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            padding: 32px 24px;
+        }
+        h1, h2 {
+            font-family: 'Nico Moji', 'Kiwi Maru', 'Comic Sans MS', 'Segoe UI', cursive, 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN', 'Rounded Mplus 1c', 'Arial Rounded MT Bold', 'Meiryo', 'sans-serif';
+            color: #7a6a58;
+        }
+        .cat-illustration {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        .cat-illustration img {
+            width: 220px;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            animation: catSwing 2.5s infinite alternate ease-in-out;
+        }
+        .cat-illustration img:hover {
+            transform: rotate(-8deg) scale(1.05);
+            animation: none;
+        }
+        @keyframes catSwing {
+            0% { transform: rotate(-3deg) scale(1.01); }
+            50% { transform: rotate(3deg) scale(1.04); }
+            100% { transform: rotate(-3deg) scale(1.01); }
+        }
+        .section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s;
+        }
+        .section.active {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 0.6s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .contact {
+            text-align: center;
+            margin-top: 40px;
+            color: #7a6a58;
+            font-family: 'Kiwi Maru', 'Comic Sans MS', 'Segoe UI', cursive, 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN', 'Rounded Mplus 1c', 'Arial Rounded MT Bold', 'Meiryo', 'sans-serif';
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px 6px;
+            }
+            .cat-illustration img {
+                width: 140px;
+            }
+        }
+    </style>
+    <script>
+        let currentSection = 'about';
+        function showSection(id) {
+            if (id === currentSection) return;
+            const prev = document.getElementById(currentSection);
+            const next = document.getElementById(id);
+            if (prev) {
+                prev.classList.remove('active');
+            }
+            setTimeout(() => {
+                next.classList.add('active');
+                currentSection = id;
+            }, 20); // 让动画生效
+            document.querySelectorAll('.navbar a').forEach(a => a.classList.remove('active'));
+            document.getElementById('nav-' + id).classList.add('active');
+        }
+        window.onload = function() {
+            document.getElementById('about').classList.add('active');
+            document.getElementById('nav-about').classList.add('active');
+        }
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <a href="#" id="nav-about" onclick="showSection('about');return false;">🐾 私について</a>
+        <a href="#" id="nav-career" onclick="showSection('career');return false;">💼 職業・専門</a>
+    </div>
+    <div class="container">
+        <div class="cat-illustration">
+            <img src="title.png" alt="タイトル画像">
+        </div>
+        <div id="about" class="section">
+            <h1>こんにちは、私は梅雨竹です！</h1>
+            <p>出身地：中国重慶<br>
+            学歴：大学卒業<br>
+            趣味：運動、料理、猫、旅行など。</p>
+            <p>私は生活を愛する社会人兼ブロガーです。温かい言葉と手描きイラストで成長や思いを記録するのが好きです。このウェブサイトを通じて、より本当の私を知っていただければ嬉しいです。</p>
+        </div>
+        <div id="career" class="section">
+            <h2>職業・専門分野の紹介</h2>
+            <ul>
+                <li><strong>スキル：</strong>COBOL、Python開発、データ分析、Webフロントエンド、コンテンツ制作</li>
+                <li><strong>職務経験：</strong>1年のIT企業での開発およびプロジェクトテスト経験</li>
+                <li><strong>プロジェクト事例：</strong>企業公式サイト構築、データ可視化プラットフォーム、個人ブログシステムなど</li>
+            </ul>
+            <p>私の<a href="https://docs.google.com/spreadsheets/d/1zIUt3Tf9nP0-JHxTX1O4w_97hqirhzlPUv_NLTbsQjg/edit?usp=drive_link" target="_blank">履歴書</a>をオンラインでご覧いただけます。または下記の方法でご連絡ください！</p>
+        </div>
+        <div class="contact">
+            📧 メール：u.bai@skillcore.ai &nbsp; | &nbsp; 🐱Tel:03-5809-2870(Skillcore株式会社 ) | &nbsp; based in Tokyo
+        </div>
+    </div>
+</body>
+</html> 
