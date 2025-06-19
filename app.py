@@ -72,4 +72,4 @@ def get_comments():
         return jsonify({"error": f"读取留言时发生错误: {str(e)}"}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080, host='0.0.0.0')
+    app.run(debug=False)
