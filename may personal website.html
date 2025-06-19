@@ -178,7 +178,7 @@
             e.preventDefault();
             const formData = new FormData(this);
 
-            fetch("http://localhost:8080/api/comment", {
+            fetch("https://may0714.pythonanywhere.com/api/comment", {
                 method: "POST",
                 body: formData
             })
@@ -195,7 +195,7 @@
 
         // 加载评论函数
         function loadComments() {
-            fetch("http://localhost:8080/api/comments")
+            fetch("https://may0714.pythonanywhere.com/api/comments")
             .then(res => res.json())
             .then(data => {
                 const list = document.getElementById("comment-items");
