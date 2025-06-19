@@ -91,12 +91,83 @@
             color: #7a6a58;
             font-family: 'Kiwi Maru', 'Comic Sans MS', 'Segoe UI', cursive, 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN', 'Rounded Mplus 1c', 'Arial Rounded MT Bold', 'Meiryo', 'sans-serif';
         }
+        
+        /* 留言板样式 */
+        .comment-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 16px;
+            border: 2px solid #e2d2be;
+        }
+        
+        .comment-form {
+            margin-bottom: 20px;
+        }
+        
+        .comment-form input,
+        .comment-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid #e2d2be;
+            border-radius: 8px;
+            font-family: 'Kiwi Maru', sans-serif;
+            font-size: 14px;
+        }
+        
+        .comment-form textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .comment-form button {
+            background: #7a6a58;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nico Moji', sans-serif;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .comment-form button:hover {
+            background: #6d5c4d;
+        }
+        
+        .comments-list {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(245,233,218,0.6);
+            border-radius: 12px;
+        }
+        
+        .comment-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #7a6a58;
+            font-family: 'Kiwi Maru', sans-serif;
+        }
+        
+        .comment-name {
+            font-weight: bold;
+            color: #7a6a58;
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 16px 6px;
             }
             .cat-illustration img {
                 width: 140px;
+            }
+            .comment-form input,
+            .comment-form textarea {
+                font-size: 16px; /* 移动端防止缩放 */
             }
         }
     </style>
@@ -116,10 +187,16 @@
             document.querySelectorAll('.navbar a').forEach(a => a.classList.remove('active'));
             document.getElementById('nav-' + id).classList.add('active');
         }
-        window.onload = function() {
+        
+        // 页面初始化函数
+        function initializePage() {
             document.getElementById('about').classList.add('active');
             document.getElementById('nav-about').classList.add('active');
+            loadComments(); // 加载评论
         }
+        
+        // 统一使用一个load事件监听器
+        window.addEventListener('load', initializePage);
     </script>
 </head>
 <body>
@@ -131,6 +208,22 @@
         <div class="cat-illustration">
             <img src="title.png" alt="タイトル画像">
         </div>
+        
+        <h2>🐾 コメントを残す</h2>
+        <div class="comment-section">
+            <div class="comment-form">
+                <input type="text" name="name" placeholder="お名前" required><br><br>
+                <textarea name="message" placeholder="メッセージを入力してください" required></textarea><br><br>
+                <button type="submit">送信</button>
+            </div>
+        </div>
+        
+        <!-- 留言显示区域 -->
+        <div class="comments-list">
+            <h3>📬 みんなのコメント</h3>
+            <ul id="comment-items" style="list-style: none; padding-left: 0;"></ul>
+        </div>
+
         <div id="about" class="section">
             <h1>こんにちは、私は梅雨竹です！</h1>
             <p>出身地：中国重慶<br>
@@ -151,5 +244,52 @@
             📧 メール：u.bai@skillcore.ai &nbsp; | &nbsp; 🐱Tel:03-5809-2870(Skillcore株式会社 ) | &nbsp; based in Tokyo
         </div>
     </div>
+    
+    <script>
+        // 留言提交处理
+        document.querySelector(".comment-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch("https://may0714.pythonanywhere.com/api/comment", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert("送信成功！ありがとうございます！");
+                this.reset();
+                loadComments(); // 提交成功后重新加载评论
+            })
+            .catch(err => {
+                alert("エラーが発生しました。");
+            });
+        });
+
+        // 加载评论函数
+        function loadComments() {
+            fetch("https://may0714.pythonanywhere.com/api/comments")
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById("comment-items");
+                list.innerHTML = ""; // 清空旧内容
+                if (data.length === 0) {
+                    list.innerHTML = "<li class='comment-item'>まだコメントがありません。</li>";
+                } else {
+                    data.forEach(comment => {
+                        const li = document.createElement("li");
+                        li.className = "comment-item";
+                        li.innerHTML = `<span class="comment-name">${comment.name}</span>：${comment.message}`;
+                        list.appendChild(li);
+                    });
+                }
+            })
+            .catch(err => {
+                console.error("コメント読み込み失敗", err);
+                const list = document.getElementById("comment-items");
+                list.innerHTML = "<li class='comment-item'>コメントの読み込みに失敗しました。</li>";
+            });
+        }
+    </script>
 </body>
 </html> 
