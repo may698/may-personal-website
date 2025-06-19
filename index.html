@@ -211,11 +211,11 @@
         
         <h2>🐾 コメントを残す</h2>
         <div class="comment-section">
-            <div class="comment-form">
+            <form class="comment-form">
                 <input type="text" name="name" placeholder="お名前" required><br><br>
                 <textarea name="message" placeholder="メッセージを入力してください" required></textarea><br><br>
                 <button type="submit">送信</button>
-            </div>
+            </form>
         </div>
         
         <!-- 留言显示区域 -->
@@ -249,27 +249,52 @@
         // 留言提交处理
         document.querySelector(".comment-form").addEventListener("submit", function(e) {
             e.preventDefault();
-            const formData = new FormData(this);
+            
+            const nameInput = this.querySelector('input[name="name"]');
+            const messageInput = this.querySelector('textarea[name="message"]');
+            
+            const name = nameInput.value.trim();
+            const message = messageInput.value.trim();
+            
+            if (!name || !message) {
+                alert("お名前とメッセージを入力してください。");
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('message', message);
 
             fetch("https://may0714.pythonanywhere.com/api/comment", {
                 method: "POST",
                 body: formData
             })
-            .then(res => res.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 alert("送信成功！ありがとうございます！");
                 this.reset();
                 loadComments(); // 提交成功后重新加载评论
             })
             .catch(err => {
-                alert("エラーが発生しました。");
+                console.error("提交错误:", err);
+                alert("エラーが発生しました。もう一度お試しください。");
             });
         });
 
         // 加载评论函数
         function loadComments() {
             fetch("https://may0714.pythonanywhere.com/api/comments")
-            .then(res => res.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 const list = document.getElementById("comment-items");
                 list.innerHTML = ""; // 清空旧内容
